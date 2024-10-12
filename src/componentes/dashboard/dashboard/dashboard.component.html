@@ -1,0 +1,118 @@
+<div class="container mt-5">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-md-3">
+      <div class="list-group">
+        <a (click)="showView('dashboard')" class="list-group-item list-group-item-action" [class.active]="selectedView === 'dashboard'">Dashboard</a>
+        <a (click)="showView('profile')" class="list-group-item list-group-item-action" [class.active]="selectedView === 'profile'">Perfil</a>
+        <a (click)="showView('settings')" class="list-group-item list-group-item-action" [class.active]="selectedView === 'settings'">Ajustes</a>
+        <a (click)="logout()" class="list-group-item list-group-item-action">Cerrar Sesión</a>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="col-md-9">
+      <div *ngIf="selectedView === 'dashboard'">
+        <h1>Bienvenido, {{ user.username}}</h1>
+        <p>Aquí puedes gestionar las funcionalidades de tu cuenta y revisar la actividad reciente.</p>
+
+        <div class="card mt-4">
+          <div class="card-header">
+            Resumen de Actividades
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Última Actividad</h5>
+            <p class="card-text">No tienes actividad reciente.</p>
+            <a href="#" class="btn btn-primary">Ver más detalles</a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="selectedView === 'profile'">
+        <h2>Perfil de Usuario</h2>
+        <form (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" class="form-control" [(ngModel)]="user.username" name="username" disabled>
+          </div>
+  
+          <div class="form-group">
+            <label for="email">Correo Electrónico</label>
+            <input type="email" id="email" class="form-control" [(ngModel)]="user.email" name="email">
+          </div>
+  
+          <div class="form-group">
+            <label for="role">Rol</label>
+            <input type="text" id="role" class="form-control" [(ngModel)]="user.role" name="role" disabled>
+          </div>
+  
+          <button type="submit" class="btn btn-primary mt-3">Actualizar Perfil</button>
+        </form>
+      </div>
+
+      
+
+      <!-- Sección de Ajustes -->
+      <div *ngIf="selectedView === 'settings'">
+        <h2>Ajustes</h2>
+
+        <!-- Preferencias de Idioma -->
+        <div class="settings-section">
+          <h3>Preferencias de Idioma</h3>
+          <select [(ngModel)]="selectedLanguage" (change)="changeLanguage()">
+            <option value="es">Español</option>
+            <option value="en">Inglés</option>
+            <option value="fr">Francés</option>
+          </select>
+        </div>
+
+        <!-- Modo Oscuro/Claro -->
+        <div class="settings-section">
+          <h3>Modo Oscuro/Claro</h3>
+          <button (click)="toggleTheme()">
+            {{ isDarkMode ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro' }}
+          </button>
+        </div>
+
+        <!-- Notificaciones -->
+        <div class="settings-section">
+          <h3>Notificaciones</h3>
+          <div>
+            <input type="checkbox" id="task-alerts" [(ngModel)]="notifications.tasks">
+            <label for="task-alerts">Alertas sobre nuevas tareas</label>
+          </div>
+          <div>
+            <input type="checkbox" id="event-alerts" [(ngModel)]="notifications.events">
+            <label for="event-alerts">Alertas sobre eventos</label>
+          </div>
+        </div>
+
+        <!-- Privacidad y Seguridad -->
+        <div class="settings-section">
+          <h3>Privacidad y Seguridad</h3>
+          <button (click)="setup2FA()">Configurar Autenticación de Dos Factores (2FA)</button>
+          <button (click)="viewActiveSessions()">Ver Sesiones Activas</button>
+        </div>
+
+        <!-- Accesibilidad -->
+        <div class="settings-section">
+          <h3>Accesibilidad</h3>
+          <div>
+            <label for="text-size">Tamaño del texto:</label>
+            <input type="range" id="text-size" min="12" max="24" [(ngModel)]="accessibility.textSize">
+          </div>
+          <div>
+            <input type="checkbox" id="high-contrast" [(ngModel)]="accessibility.highContrast">
+            <label for="high-contrast">Modo de alto contraste</label>
+          </div>
+        </div>
+
+        <!-- Configuración del Centro (solo visible para profesores/administradores) -->
+        <div class="settings-section" *ngIf="user.role === 'admin'">
+          <h3>Configuración del Centro</h3>
+          <p>Aquí puedes gestionar configuraciones adicionales relacionadas con el centro escolar o las clases.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
